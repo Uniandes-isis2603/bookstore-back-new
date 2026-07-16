@@ -95,7 +95,7 @@ class AuthorServiceTest {
 	 * Inserta los datos iniciales para el correcto funcionamiento de las pruebas.
 	 */
 	private void insertData() {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 5; i++) {
 			AuthorEntity authorEntity = factory.manufacturePojo(AuthorEntity.class);
 			entityManager.persist(authorEntity);
 			authorList.add(authorEntity);

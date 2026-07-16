@@ -29,6 +29,15 @@ Servir como **referencia** para que los equipos:
 └── ...
 ```
 
+| Paso | Nombre Rama          | Descripción                                                                             | Rama                                                                                                  | Release                                                                             |
+| ---- | -------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+|      | main                 | Rama principal con el estado final completo                                             | [main](https://github.com/Uniandes-isis2603/bookstore-back)                                           | [Release](https://github.com/Uniandes-isis2603/bookstore-back)                      |
+| 1°   | persistencia         | Implementación de la persistencia de las entidades del proyecto                         | [persistencia](https://github.com/Uniandes-isis2603/bookstore-back/tree/persistencia)                 | [Release](https://github.com/Uniandes-isis2603/bookstore-back/releases/tag/v.1.0.0) |
+| 2°   | logica-entidades     | Implementacion de los servicios y las reglas de negocio de las entidades                | [logica-entidades](https://github.com/Uniandes-isis2603/bookstore-back/tree/Logica-entidades)         | [Release](https://github.com/Uniandes-isis2603/bookstore-back/releases/tag/v.2.0.0) |
+| 3°   | pruebas-entidades    | Implementación de las pruebas unitarias de la lógica creada en el paso 2°               | [pruebas-entidades](https://github.com/Uniandes-isis2603/bookstore-back/tree/pruebas-entidades)       | [Release](https://github.com/Uniandes-isis2603/bookstore-back/releases/tag/v.2.0.5) |
+| 4°   | logica-asociaciones  | Implementación de los servicios y reglas de negocio de las asociaciones entre entidades | [logica-asociaciones](https://github.com/Uniandes-isis2603/bookstore-back/tree/logica-asociaciones)   | [Release](https://github.com/Uniandes-isis2603/bookstore-back/releases/tag/v.3.0.0) |
+| 5°   | pruebas-asociaciones | Implementación de las pruebas unitarias de la lógica creada en el paso 4°               | [pruebas-asociaciones](https://github.com/Uniandes-isis2603/bookstore-back/tree/pruebas-asociaciones) | [Release](https://github.com/Uniandes-isis2603/bookstore-back/releases/tag/v.3.0.5) |
+
 ## 🚀 ¿Cómo usar este repositorio?
 
 1. **Clona el repositorio**

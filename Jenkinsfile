@@ -1,8 +1,8 @@
 pipeline { 
    agent any 
    environment {
-      GIT_REPO = 'bookstore-back-new'
-      GIT_CREDENTIAL_ID = '7c21addc-0cbf-4f2e-9bd8-eced479c56c6'
+      GIT_REPO = 'bookstore-back'
+      GIT_CREDENTIAL_ID = 'ms-GitHub-Credentials-for-jenkins'
       SONARQUBE_URL = 'http://172.24.101.209:8082/sonar-isis2603'
       ARCHID_TOKEN = credentials('archid')
       SONAR_TOKEN = credentials('sonar-login')
@@ -35,24 +35,48 @@ pipeline {
       }
       stage('Build') {
          // Build artifacts
+         options {
+            timeout(time: 1, unit: 'MINUTES')
+         }
          steps {
             script {
+               CURRENT_STAGE = 'Build'
                docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
                      java -version
-                     mvn clean install
+                     mvn clean install -DskipTests 
                   '''
                }
             }
          }
       }
-      stage('Testing') {
+      stage('Unit Tests') {
          // Run unit tests
+         options {
+            timeout(time: 1, unit: 'MINUTES')
+         }
          steps {
             script {
-               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {                  
+               CURRENT_STAGE = 'Unit Tests'
+               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
                   sh '''
-                     mvn test
+                     mvn verify -Punit-tests
+                  '''
+               }
+            }
+         }
+      }
+      stage('Integration Tests') {
+         // Run integration tests
+         options {
+            timeout(time: 1, unit: 'MINUTES')
+         }
+         steps {
+            script {
+               CURRENT_STAGE = 'Integration Tests'
+               docker.image('citools-isis2603:latest').inside('-v $HOME/.m2:/root/.m2:z -u root') {
+                  sh '''
+                     mvn verify -Pintegration-tests
                   '''
                }
             }
@@ -92,6 +116,9 @@ pipeline {
         dir("${env.GIT_REPO}@tmp") {
           deleteDir()
         }
+      }
+      aborted {
+         error("⏰ Pipeline aborted: time limit exceeded at stage '${CURRENT_STAGE}'")
       }
    }
 }
