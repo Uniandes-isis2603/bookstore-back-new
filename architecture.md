@@ -45,14 +45,14 @@ La aplicación **Bookstore** es un sistema de gestión de una tienda de libros q
 ├─────────────────────────────────────────────────────────┤
 │                                                           │
 │  ┌──────────────────────────────────────────────────┐    │
-│  │              EDITORIAL (1)                        │    │
-│  │         Publica múltiples libros                  │    │
+│  │              EDITORIAL (1)                       │    │
+│  │         Publica múltiples libros                 │    │
 │  └────────────────────┬─────────────────────────────┘    │
 │                       │ (1:N)                             │
 │                       ▼                                   │
 │  ┌──────────────────────────────────────────────────┐    │
-│  │              BOOK (Núcleo)                        │    │
-│  │    ISBN, Descripción, Imagen, Fecha Pub.        │    │
+│  │              BOOK (Núcleo)                       │    │
+│  │    ISBN, Descripción, Imagen, Fecha Pub.         │    │
 │  └────────┬─────────────────────────────┬───────────┘    │
 │           │ (N:M)                       │ (1:N)           │
 │           ▼                             ▼                │
@@ -827,28 +827,26 @@ public class BookService {
 ### 11. **¿Cómo se entienden las capas de la aplicación y cómo se manejan?**
 
 #### **Arquitectura en Capas (Layered Architecture):**
-
-```
 ┌────────────────────────────────────────────────────┐
 │          CAPA DE PRESENTACIÓN (REST API)           │
 │  Controllers (HTTP Request/Response Handling)      │
 │                                                    │
-│  BookController, AuthorController, etc.           │
-│  - @RestController                                │
-│  - @RequestMapping("/endpoint")                   │
-│  - Convierte DTOs ↔ Entidades                     │
-└────────────────┬─────────────────────────────────┘
+│  BookController, AuthorController, etc.            │
+│  - @RestController                                 │
+│  - @RequestMapping("/endpoint")                    │
+│  - Convierte DTOs ↔ Entidades                      │
+└────────────────┬─────────────────────────────────  ┘
                  │ @Autowired
                  ▼
 ┌────────────────────────────────────────────────────┐
 │      CAPA DE LÓGICA DE NEGOCIO (Services)          │
 │  Implementa reglas de negocio y orquestación       │
 │                                                    │
-│  BookService, AuthorService, etc.                 │
-│  - @Service                                       │
-│  - @Transactional                                 │
-│  - Validaciones complejas                         │
-│  - Orquestación de operaciones                    │
+│  BookService, AuthorService, etc.                  │
+│  - @Service                                        │
+│  - @Transactional                                  │
+│  - Validaciones complejas                          │
+│  - Orquestación de operaciones                     │
 └────────────────┬─────────────────────────────────┘
                  │ @Autowired
                  ▼
@@ -856,21 +854,22 @@ public class BookService {
 │   CAPA DE ACCESO A DATOS (Repositories)            │
 │  Abstracción de la fuente de datos                 │
 │                                                    │
-│  BookRepository, AuthorRepository, etc.           │
-│  - extends JpaRepository<Entity, Long>            │
-│  - Consultas a base de datos                      │
-│  - Métodos personalizados de búsqueda             │
+│  BookRepository, AuthorRepository, etc.            │
+│  - extends JpaRepository<Entity, Long>             │
+│  - Consultas a base de datos                       │
+│  - Métodos personalizados de búsqueda              │
 └────────────────┬─────────────────────────────────┘
                  │ Spring Data JPA
                  ▼
 ┌────────────────────────────────────────────────────┐
 │        CAPA DE PERSISTENCIA (Database)             │
-│  H2 (Desarrollo) / PostgreSQL (Producción)        │
+│  H2 (Desarrollo) / PostgreSQL (Producción)         │
 │                                                    │
-│  Tablas: book_entity, author_entity, etc.         │
-│  - SQL Schema                                     │
-│  - Datos persistidos                              │
+│  Tablas: book_entity, author_entity, etc.          │
+│  - SQL Schema                                      │
+│  - Datos persistidos                               │
 └────────────────────────────────────────────────────┘
+
 ```
 
 #### **Características de Cada Capa:**

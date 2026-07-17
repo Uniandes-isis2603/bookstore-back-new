@@ -1,0 +1,281 @@
+{
+  "info": {
+    "name": "Target Bookstore - Books CRUD",
+    "description": "Postman collection to validate CRUD operations for /api/books in target-bookstore.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "c0e9f8a1-5c3f-4b7e-b8de-f6f6b8b0d1a2"
+  },
+  "item": [
+    {
+      "name": "Create Book",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const unique = Date.now();",
+              "pm.collectionVariables.set('isbn', `isbn-${unique}`);",
+              "pm.collectionVariables.set('title', `Book ${unique}`);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "pm.collectionVariables.set('bookId', data.id);",
+              "",
+              "pm.test('Response contains created id', function () {",
+              "  pm.expect(data).to.have.property('id');",
+              "});",
+              "",
+              "pm.test('Response echoes key fields', function () {",
+              "  pm.expect(data.isbn).to.eql(pm.collectionVariables.get('isbn'));",
+              "  pm.expect(data.title).to.eql(pm.collectionVariables.get('title'));",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isbn\": \"{{isbn}}\",\n  \"title\": \"{{title}}\",\n  \"description\": \"Created from Postman collection\",\n  \"publishDate\": \"2025-01-01T00:00:00.000Z\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Books",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const list = pm.response.json();",
+              "",
+              "pm.test('Response is an array', function () {",
+              "  pm.expect(Array.isArray(list)).to.eql(true);",
+              "});",
+              "",
+              "pm.test('Created book is present in list', function () {",
+              "  const bookId = Number(pm.collectionVariables.get('bookId'));",
+              "  pm.expect(list.some(b => b.id === bookId)).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Book By Id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "const bookId = Number(pm.collectionVariables.get('bookId'));",
+              "",
+              "pm.test('Returns requested id', function () {",
+              "  pm.expect(data.id).to.eql(bookId);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "",
+              "pm.test('Title was updated', function () {",
+              "  pm.expect(data.title).to.eql('Book updated from Postman');",
+              "});",
+              "",
+              "pm.test('Description was updated', function () {",
+              "  pm.expect(data.description).to.eql('Updated from Postman collection');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Book updated from Postman\",\n  \"description\": \"Updated from Postman collection\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 204', function () {",
+              "  pm.response.to.have.status(204);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Deleted Book (Expected 404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 404', function () {",
+              "  pm.response.to.have.status(404);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books/{{bookId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books",
+            "{{bookId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "bookId",
+      "value": ""
+    },
+    {
+      "key": "isbn",
+      "value": ""
+    },
+    {
+      "key": "title",
+      "value": ""
+    }
+  ]
+}
